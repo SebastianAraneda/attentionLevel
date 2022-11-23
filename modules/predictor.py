@@ -68,7 +68,7 @@ class Predictor():
                 pass
             atencion = atencion - counter_attention
             
-        if time.time() - att_prev > 5:
+        if time.time() - att_prev > 4:
             att_prev = time.time()
             if prevYawn - yawnCount == 0:
                 atencion += 1
@@ -95,16 +95,16 @@ class Predictor():
         
         if mesh_list is not None: # None cuando no detecta rostro.
         # BLINK DETECTION
-            eye_ratio = self.eyeUnit.blinking_ratio(frame, mesh_list, draw= True )
+            eye_ratio = self.eyeUnit.blinking_ratio(frame, mesh_list, draw= False )
             self.eyeClosed, self.blinkCount = blink_detection(eye_ratio, self.blinkCount, self.eyeClosed)
 
         # YAWN DETECTION
-            mouth_ratio = self.mouthUnit.mouth_aspect_ratio(frame, mesh_list, draw=True)
+            mouth_ratio = self.mouthUnit.mouth_aspect_ratio(frame, mesh_list, draw=False)
             self.yawning, self.yawnCount = yawn_detection(mouth_ratio, self.yawnCount, self.yawning)
             
         # HEAD POSE DETECTION
             if results is not None:
-                head_pose, x_angle, y_angle, z_angle = self.headUnit.head_tilting(results, frame, d_line = True)
+                head_pose, x_angle, y_angle, z_angle = self.headUnit.head_tilting(results, frame, d_line = False)
 
         # ATTENTION LEVEL
         atencion = self.attention_calc(self.yawnCount)
